@@ -102,7 +102,7 @@ class RolePermissionProvider extends ServiceProvider
             ->flatMap(function ($path) use ($filesystem, $migrationFileName) {
                 return $filesystem->glob($path.'*_'.$migrationFileName);
             })
-            ->push($this->app->databasePath()."/migrations/{$timestamp}_{$order}_{$migrationFileName}")
+            ->push($this->app->databasePath()."/migrations/{$timestamp}{$order}_{$migrationFileName}")
             ->first();
     }
 }
