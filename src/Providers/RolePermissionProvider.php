@@ -3,10 +3,31 @@
 namespace Sunil\LaravelRolePermissionAccess\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
 
 class RolePermissionProvider extends ServiceProvider
 {
+    protected function offerPublishing() {
+        if (! function_exists('config_path')) {
+            // function not available and 'publish' not relevant in Lumen
+            return;
+        }
+
+        $this->publishes([ __DIR__.'/../../database/migrations/create_roles_table.php' => $this->getMigrationFileName('create_roles_table.php') ], 'migrations');
+
+        $this->publishes([ __DIR__.'/../../database/migrations/create_modules_table.php' => $this->getMigrationFileName('create_modules_table.php') ], 'migrations');
+        
+        $this->publishes([ __DIR__.'/../../database/migrations/create_user_role_modules_table.php' => $this->getMigrationFileName('create_user_role_modules_table.php') ], 'migrations');
+        
+        $this->publishes([ __DIR__.'/../../database/migrations/create_role_module_operations_table.php' => $this->getMigrationFileName('create_role_module_operations_table.php') ], 'migrations');
+        
+        $this->publishes([ __DIR__.'/../../database/migrations/create_role_checkers_table.php' => $this->getMigrationFileName('create_role_checkers_table.php') ], 'migrations');
+        
+        $this->publishes([ __DIR__.'/../../database/migrations/create_approvals_table.php' => $this->getMigrationFileName('create_approvals_table.php') ], 'migrations');
+    }
+
     public function bladeDirectives() {
         Blade::if('canCreate', function () {
             $super_admin = request()->user()->isSuperAdmin();
@@ -67,7 +88,21 @@ class RolePermissionProvider extends ServiceProvider
     public function boot()
     {
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        // $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
+        $this->offerPublishing();
         $this->bladeDirectives();
+    }
+
+    protected function getMigrationFileName($migrationFileName): string {
+        $timestamp = date('Y_m_d_His');
+
+        $filesystem = $this->app->make(Filesystem::class);
+
+        return Collection::make($this->app->databasePath().DIRECTORY_SEPARATOR.'migrations'.DIRECTORY_SEPARATOR)
+            ->flatMap(function ($path) use ($filesystem, $migrationFileName) {
+                return $filesystem->glob($path.'*_'.$migrationFileName);
+            })
+            ->push($this->app->databasePath()."/migrations/{$timestamp}_{$migrationFileName}")
+            ->first();
     }
 }
