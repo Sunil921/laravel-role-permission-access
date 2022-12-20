@@ -1,0 +1,26 @@
+{
+    "name": "sunil/laravel-role-permission-access",
+    "description": "User role permission module wise access",
+    "autoload": {
+        "psr-4": {
+            "Sunil\\LaravelRolePermissionAccess\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Sunil Thakur",
+            "email": "sunil.ast.dev@gmail.com"
+        }
+    ],
+    "homepage": "https://github.com/Sunil921/laravel-role-permission-access.git",
+    "require": {
+        "php": "^7.3|^8.0|^8.1",
+        "illuminate/auth": "^7.0|^8.0|^9.0",
+        "illuminate/container": "^7.0|^8.0|^9.0",
+        "illuminate/contracts": "^7.0|^8.0|^9.0",
+        "illuminate/database": "^7.0|^8.0|^9.0"
+    }
+}
