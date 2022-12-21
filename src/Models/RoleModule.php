@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
-class UserRoleModule extends Model
+class RoleModule extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = ["role_id", "module_id"];

@@ -19,7 +19,7 @@ class RolePermissionProvider extends ServiceProvider
         
         $this->publishes([ __DIR__.'/../../database/migrations/create_roles_table.php.stub' => $this->getMigrationFileName('create_roles_table.php', 2) ], 'migrations');
         
-        $this->publishes([ __DIR__.'/../../database/migrations/create_user_role_modules_table.php.stub' => $this->getMigrationFileName('create_user_role_modules_table.php', 3) ], 'migrations');
+        $this->publishes([ __DIR__.'/../../database/migrations/create_role_modules_table.php.stub' => $this->getMigrationFileName('create_role_modules_table.php.php', 3) ], 'migrations');
         
         $this->publishes([ __DIR__.'/../../database/migrations/create_role_module_operations_table.php.stub' => $this->getMigrationFileName('create_role_module_operations_table.php', 4) ], 'migrations');
         
