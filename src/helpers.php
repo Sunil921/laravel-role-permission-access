@@ -1,7 +1,7 @@
 <?php
 
 use Sunil\LaravelRolePermissionAccess\Models\RoleModuleOperation;
-use Sunil\LaravelRolePermissionAccess\Models\UserRoleModule;
+use Sunil\LaravelRolePermissionAccess\Models\RoleModule;
 use Sunil\LaravelRolePermissionAccess\Models\Module;
 use Sunil\LaravelRolePermissionAccess\Models\Approval;
 
@@ -23,7 +23,7 @@ if (! function_exists('authorizeRoleModule')) {
         $module = getModuleFromRoute($module_name);
         if (!$module)
             return -1;                                                          // reject response
-        $use_role_module = UserRoleModule::where('role_id', $role_id)->where('module_id', $module->id)->first();
+        $use_role_module = RoleModule::where('role_id', $role_id)->where('module_id', $module->id)->first();
         if ($use_role_module) {
             $role_module_operation = RoleModuleOperation::where('role_module_id', $use_role_module->id)->first();
             if (isset($role_module_operation)) {
