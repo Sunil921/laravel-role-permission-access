@@ -59,6 +59,13 @@ class RolePermissionProvider extends ServiceProvider
             return str_contains($operation->operation, 'c') ? true : (str_contains($operation->operation, 'u') ? true : false);
         });
 
+        Blade::if('canUpdateOrDelete', function () {
+            $super_admin = request()->user()->isSuperAdmin();
+            if ($super_admin) return true;
+            $operation = getCurrentRoleOperation();
+            return str_contains($operation->operation, 'c') ? true : (str_contains($operation->operation, 'u') ? true : false);
+        });
+
         Blade::if('canDelete', function () {
             $super_admin = request()->user()->isSuperAdmin();
             if ($super_admin) return true;
