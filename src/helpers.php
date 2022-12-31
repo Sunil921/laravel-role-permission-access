@@ -55,9 +55,9 @@ if (! function_exists('getCurrentRoleOperation')) {
     function getCurrentRoleOperation()
     {
         $operation = RoleModuleOperation::select('role_module_operations.operation')
-                                        ->join('user_role_modules', 'user_role_modules.id', 'role_module_operations.role_module_id')
-                                        ->where('user_role_modules.role_id', request()->user()->role_id)
-                                        ->where('user_role_modules.module_id', getModuleFromRoute()->id)
+                                        ->join('role_modules', 'role_modules.id', 'role_module_operations.role_module_id')
+                                        ->where('role_modules.role_id', request()->user()->role_id)
+                                        ->where('role_modules.module_id', getModuleFromRoute()->id)
                                         ->first();
         return $operation;
     }
