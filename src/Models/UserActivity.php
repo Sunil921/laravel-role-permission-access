@@ -9,4 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class UserActivity extends Model
 {
     use HasFactory, SoftDeletes;
+
+    protected $casts = [
+        'body' => 'array',
+    ];    
 }
