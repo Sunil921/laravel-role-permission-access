@@ -9,5 +9,5 @@ use Illuminate\Database\Eloquent\Model;
 class Module extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $fillable = ['name', 'icon', 'link', 'menu'];
+    protected $fillable = ['name', 'icon', 'link'];
 }

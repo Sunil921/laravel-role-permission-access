@@ -39,12 +39,10 @@ class ModuleController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'menu' => 'required',
             'link' => 'required',
             'icon' => 'required',
         ], [
             'name.required' => 'Module name is required',            
-            'menu.required' => 'Module menu is required',            
             'link.required' => 'Module link is required',            
             'icon.required' => 'Module icon is required',            
         ]);
@@ -57,7 +55,6 @@ class ModuleController extends Controller
         $module->name = $request->name;
         $module->icon = $request->icon;
         $module->link = $request->link;
-        $module->menu = $request->menu;
         if ($module->save()) {
             return redirect()->route('module.index')->with('success','Module store successfully');
         }

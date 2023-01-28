@@ -28,7 +28,7 @@ if (! function_exists('authorizeRoleModule')) {
             $role_module_operation = RoleModuleOperation::where('role_module_id', $use_role_module->id)->first();
             if (isset($role_module_operation)) {
                 $operation = $role_module_operation->operation;
-                if (str_contains($operation, 'h') && ($p_operation == 'r' || ($p_operation == 'u' && $module->menu == 'Manage' && in_array("GET", request()->route()->methods()))))
+                if (str_contains($operation, 'h') && ($p_operation == 'r' || ($p_operation == 'u' && in_array("GET", request()->route()->methods()))))
                     return 1;                                                           // approve response
                 else if (str_contains($operation, $p_operation))
                     return 1;                                                           // approve response
