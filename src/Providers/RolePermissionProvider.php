@@ -28,63 +28,48 @@ class RolePermissionProvider extends ServiceProvider
         $this->publishes([ __DIR__.'/../../database/migrations/create_approvals_table.php.stub' => $this->getMigrationFileName('create_approvals_table.php', 6) ], 'migrations');
     }
 
+    public function checkPermissions($operation1, $operation2 = null) {
+        $super_admin = request()->user()->isSuperAdmin();
+        if ($super_admin) return true;
+        $operation = getCurrentRoleOperation();
+        return str_contains($operation->operation, $operation1) ? true : (isset($operation2) && str_contains($operation->operation, $operation2) ? true : false);
+    }
+
     public function bladeDirectives() {
         Blade::if('canCreate', function () {
-            $super_admin = request()->user()->isSuperAdmin();
-            if ($super_admin) return true;
-            $operation = getCurrentRoleOperation();
-            return str_contains($operation->operation, 'c') ? true : false;
+            $this->checkPermissions('c');
         });
 
         Blade::if('canRead', function () {
-            $super_admin = request()->user()->isSuperAdmin();
-            if ($super_admin) return true;
-            $operation = getCurrentRoleOperation();
-            return str_contains($operation->operation, 'r') ? true : false;
+            $this->checkPermissions('r');
+        });
+
+        Blade::if('canReadOrCreate', function () {
+            $this->checkPermissions('r', 'c');
         });
 
         Blade::if('canUpdate', function ($check = null) {
-            $super_admin = request()->user()->isSuperAdmin();
-            if ($super_admin) return true;
-            $operation = getCurrentRoleOperation();
-            if ($check)
-                return str_contains($operation->operation, 'h') ? true : false;
-            return str_contains($operation->operation, 'u') ? true : false;
+            $this->checkPermissions('h', 'u');
         });
 
         Blade::if('canCreateOrUpdate', function () {
-            $super_admin = request()->user()->isSuperAdmin();
-            if ($super_admin) return true;
-            $operation = getCurrentRoleOperation();
-            return str_contains($operation->operation, 'c') ? true : (str_contains($operation->operation, 'u') ? true : false);
+            $this->checkPermissions('c', 'u');
         });
 
         Blade::if('canUpdateOrDelete', function () {
-            $super_admin = request()->user()->isSuperAdmin();
-            if ($super_admin) return true;
-            $operation = getCurrentRoleOperation();
-            return str_contains($operation->operation, 'd') ? true : (str_contains($operation->operation, 'u') ? true : false);
+            $this->checkPermissions('d', 'u');
         });
 
         Blade::if('canDelete', function () {
-            $super_admin = request()->user()->isSuperAdmin();
-            if ($super_admin) return true;
-            $operation = getCurrentRoleOperation();
-            return str_contains($operation->operation, 'd') ? true : false;
+            $this->checkPermissions('d');
         });
 
         Blade::if('canCheck', function () {
-            $super_admin = request()->user()->isSuperAdmin();
-            if ($super_admin) return true;
-            $operation = getCurrentRoleOperation();
-            return str_contains($operation->operation, 'h') ? true : false;
+            $this->checkPermissions('h');
         });
 
         Blade::if('canExportOthers', function () {
-            $super_admin = request()->user()->isSuperAdmin();
-            if ($super_admin) return true;
-            $operation = getCurrentRoleOperation();
-            return str_contains($operation->operation, 'x') ? true : false;
+            $this->checkPermissions('x');
         });
     }
     /**
