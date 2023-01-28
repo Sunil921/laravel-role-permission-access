@@ -52,7 +52,7 @@ if (! function_exists('authorizeModuleMenu')) {
 }
 
 if (! function_exists('getCurrentRoleOperation')) {
-    function getCurrentRoleOperation()
+    function getCurrentRoleOperation($module_link = null)
     {
         $operation = RoleModuleOperation::select('role_module_operations.operation')
                                         ->join('role_modules', 'role_modules.id', 'role_module_operations.role_module_id')

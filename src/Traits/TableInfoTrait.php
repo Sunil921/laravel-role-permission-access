@@ -17,7 +17,7 @@ trait TableInfoTrait {
 
     public static function getRecords($per_page = null)
     {
-        return self::orderBy('created_at', 'desc')->paginate($per_page);
+        return $per_page ? self::orderBy('created_at', 'desc')->paginate($per_page) : self::orderBy('created_at', 'desc')->get();
     }
 
 }
