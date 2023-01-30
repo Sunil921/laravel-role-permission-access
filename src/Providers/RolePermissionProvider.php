@@ -28,10 +28,10 @@ class RolePermissionProvider extends ServiceProvider
         $this->publishes([ __DIR__.'/../../database/migrations/create_approvals_table.php.stub' => $this->getMigrationFileName('create_approvals_table.php', 6) ], 'migrations');
     }
 
-    public function checkPermissions($operation1, $operation2 = null) {
+    public function checkPermissions($operation1, $operation2 = null, $module_link = null) {
         $super_admin = request()->user()->isSuperAdmin();
         if ($super_admin) return true;
-        $operation = getCurrentRoleOperation();
+        $operation = getCurrentRoleOperation($module_link);
         return str_contains($operation->operation, $operation1) ? true : (isset($operation2) && str_contains($operation->operation, $operation2) ? true : false);
     }
 
@@ -44,8 +44,8 @@ class RolePermissionProvider extends ServiceProvider
             $this->checkPermissions('r');
         });
 
-        Blade::if('canReadOrCreate', function () {
-            $this->checkPermissions('r', 'c');
+        Blade::if('canReadOrCreate', function ($module_link = null) {
+            $this->checkPermissions('r', 'c', $module_link);
         });
 
         Blade::if('canUpdate', function ($check = null) {

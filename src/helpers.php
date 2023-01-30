@@ -6,10 +6,10 @@ use Sunil\LaravelRolePermissionAccess\Models\Module;
 use Sunil\LaravelRolePermissionAccess\Models\Approval;
 
 if (! function_exists('getModuleFromRoute')) {
-    function getModuleFromRoute($module_name = null)
+    function getModuleFromRoute($module_link = null)
     {
-        $module_name = $module_name ? $module_name : request()->segment(1);
-        $module = Module::where('link', $module_name)->first();
+        $module_link = $module_link ? $module_link : request()->segment(1);
+        $module = Module::where('link', $module_link)->first();
         return $module;
     }
 }
@@ -57,7 +57,7 @@ if (! function_exists('getCurrentRoleOperation')) {
         $operation = RoleModuleOperation::select('role_module_operations.operation')
                                         ->join('role_modules', 'role_modules.id', 'role_module_operations.role_module_id')
                                         ->where('role_modules.role_id', request()->user()->role_id)
-                                        ->where('role_modules.module_id', getModuleFromRoute()->id)
+                                        ->where('role_modules.module_id', getModuleFromRoute($module_link)->id)
                                         ->first();
         return $operation;
     }
