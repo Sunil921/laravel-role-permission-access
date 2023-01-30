@@ -37,39 +37,39 @@ class RolePermissionProvider extends ServiceProvider
 
     public function bladeDirectives() {
         Blade::if('canCreate', function () {
-            $this->checkPermissions('c');
+            return $this->checkPermissions('c');
         });
 
         Blade::if('canRead', function () {
-            $this->checkPermissions('r');
+            return $this->checkPermissions('r');
         });
 
         Blade::if('canReadOrCreate', function ($module_link = null) {
-            $this->checkPermissions('r', 'c', $module_link);
+            return $this->checkPermissions('r', 'c', $module_link);
         });
 
         Blade::if('canUpdate', function ($check = null) {
-            $this->checkPermissions('h', 'u');
+            return $this->checkPermissions('h', 'u');
         });
 
         Blade::if('canCreateOrUpdate', function () {
-            $this->checkPermissions('c', 'u');
+            return $this->checkPermissions('c', 'u');
         });
 
         Blade::if('canUpdateOrDelete', function () {
-            $this->checkPermissions('d', 'u');
+            return $this->checkPermissions('d', 'u');
         });
 
         Blade::if('canDelete', function () {
-            $this->checkPermissions('d');
+            return $this->checkPermissions('d');
         });
 
         Blade::if('canCheck', function () {
-            $this->checkPermissions('h');
+            return $this->checkPermissions('h');
         });
 
         Blade::if('canExportOthers', function () {
-            $this->checkPermissions('x');
+            return $this->checkPermissions('x');
         });
     }
     /**
