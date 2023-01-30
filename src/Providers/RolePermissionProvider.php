@@ -32,6 +32,7 @@ class RolePermissionProvider extends ServiceProvider
         $super_admin = request()->user()->isSuperAdmin();
         if ($super_admin) return true;
         $operation = getCurrentRoleOperation($module_link);
+        if (empty($operation)) return false;
         return str_contains($operation->operation, $operation1) ? true : (isset($operation2) && str_contains($operation->operation, $operation2) ? true : false);
     }
 
