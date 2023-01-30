@@ -46,6 +46,7 @@ class RolePermissionProvider extends ServiceProvider
         });
 
         Blade::if('canReadOrCreate', function ($module_link = null) {
+            $module_link = ltrim(route($module_link, [], false), '/');
             return $this->checkPermissions('r', 'c', $module_link);
         });
 

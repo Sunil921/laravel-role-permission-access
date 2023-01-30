@@ -43,11 +43,10 @@ if (! function_exists('authorizeRoleModule')) {
     }
 }
 
-if (! function_exists('authorizeModuleMenu')) {
-    function authorizeModuleMenu()
+if (! function_exists('getModules')) {
+    function getModules()
     {
-        $moduls_menu_items = Module::all();
-        return $moduls_menu_items;
+        return Module::all()->keyBy('link');
     }
 }
 
