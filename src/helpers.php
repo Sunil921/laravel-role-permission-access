@@ -95,3 +95,28 @@ if (! function_exists('getTableDataWithApproval')) {
         return $table_records;
     }
 }
+
+if (! function_exists('showMenu')) {
+    function showMenu($modules, $module_link_name)
+    {
+        try {
+            $module_link = ltrim(route($module_link_name, [], false), '/');
+            $module_name = $modules[$module_link]->name;
+            $link = route($module_link_name);
+            $html = "<li aria-haspopup=\"true\"><a href=\"$link\">$module_name</a></li>";
+
+            if (request()->user()->isSuperAdmin()) return $html;
+
+            $operation = getCurrentRoleOperation($module_link);
+            if (str_contains((string)$operation?->operation, 'r')) {
+                return $html;
+            } else if (str_contains((string)$operation?->operation, 'c')) {
+                $module_link_name = str_replace('.index', '.create', $module_link_name);
+                $link = route($module_link_name);
+                $html = "<li aria-haspopup=\"true\"><a href=\"$link\">$module_name</a></li>";
+                return $html;
+            }
+        } catch(Exception $e) {}
+        return '';
+    }
+}
