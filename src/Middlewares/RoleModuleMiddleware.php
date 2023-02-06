@@ -58,7 +58,7 @@ class RoleModuleMiddleware
         $user_activity = new UserActivity();
         $user_activity->added_by = $user->id;
         $user_activity->body = json_encode($request->except('_token', '_method'));
-        $user_activity->module_id = $user->module->id;
+        $user_activity->module_id = getModuleFromRoute()?->id;
         $user_activity->module_url = $request->path();
         $user_activity->request_method = $request->method();
         $user_activity->user_agent = $request->header('User-Agent');

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->jsonb('body');
             $table->unsignedInteger('added_by');
-            $table->unsignedInteger('module_id');
+            $table->unsignedInteger('module_id')->nullable();
             $table->string('module_url');
             $table->string('request_method')->comment('GET, POST, PUT, PATCH, DELETE');
             $table->string('user_agent');
