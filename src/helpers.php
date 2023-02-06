@@ -120,3 +120,26 @@ if (! function_exists('showMenu')) {
         return '';
     }
 }
+
+if (! function_exists('rback')) {
+    /**
+     * Create a new redirect response to the previous location.
+     *
+     * @param  mixed    $withErrors
+     * @param  int      $status
+     * @param  array    $headers
+     * @param  mixed    $fallback
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    function rback($withErrors = [], $status = 302, $headers = [], $fallback = false)
+    {
+        if (!is_array($withErrors)) {
+            $withErrors = [ $withErrors ];
+        }
+        $locked = true;
+        if ($locked) {
+            $withErrors['model'] ='Database is locked';
+        }
+        return back($status, $headers, $fallback)->withErrors($withErrors);
+    }
+}

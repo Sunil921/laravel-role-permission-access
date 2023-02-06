@@ -6,9 +6,23 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Event;
 
 class RolePermissionProvider extends ServiceProvider
 {
+    protected function getMigrationFileName($migrationFileName, $order): string {
+        $timestamp = date('Y_m_d_His');
+
+        $filesystem = $this->app->make(Filesystem::class);
+
+        return Collection::make($this->app->databasePath().DIRECTORY_SEPARATOR.'migrations'.DIRECTORY_SEPARATOR)
+            ->flatMap(function ($path) use ($filesystem, $migrationFileName) {
+                return $filesystem->glob($path.'*_'.$migrationFileName);
+            })
+            ->push($this->app->databasePath()."/migrations/{$timestamp}{$order}_{$migrationFileName}")
+            ->first();
+    }
+
     protected function offerPublishing() {
         if (! function_exists('config_path')) {
             // function not available and 'publish' not relevant in Lumen
@@ -74,6 +88,15 @@ class RolePermissionProvider extends ServiceProvider
             return $this->checkPermissions('x');
         });
     }
+
+    public function registerLockModelEvents()
+    {
+        $events = ['eloquent.saving: *', 'eloquent.creating: *', 'eloquent.updating: *', 'eloquent.deleting: *', 'eloquent.restoring: *'];
+        Event::listen($events, function ($model) {
+            return false;
+        });
+    }
+
     /**
      * Bootstrap services.
      *
@@ -85,18 +108,6 @@ class RolePermissionProvider extends ServiceProvider
         // $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
         $this->offerPublishing();
         $this->bladeDirectives();
-    }
-
-    protected function getMigrationFileName($migrationFileName, $order): string {
-        $timestamp = date('Y_m_d_His');
-
-        $filesystem = $this->app->make(Filesystem::class);
-
-        return Collection::make($this->app->databasePath().DIRECTORY_SEPARATOR.'migrations'.DIRECTORY_SEPARATOR)
-            ->flatMap(function ($path) use ($filesystem, $migrationFileName) {
-                return $filesystem->glob($path.'*_'.$migrationFileName);
-            })
-            ->push($this->app->databasePath()."/migrations/{$timestamp}{$order}_{$migrationFileName}")
-            ->first();
+        $this->registerLockModelEvents();
     }
 }
