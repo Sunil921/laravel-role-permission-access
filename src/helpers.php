@@ -136,7 +136,7 @@ if (! function_exists('rback')) {
         if (!is_array($withErrors)) {
             $withErrors = [ $withErrors ];
         }
-        $locked = true;
+        $locked = false;
         if ($locked) {
             $withErrors['model'] ='Database is locked';
         }
