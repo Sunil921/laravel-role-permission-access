@@ -108,6 +108,6 @@ class RolePermissionProvider extends ServiceProvider
         // $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
         $this->offerPublishing();
         $this->bladeDirectives();
-        $this->registerLockModelEvents();
+        // $this->registerLockModelEvents();
     }
 }
