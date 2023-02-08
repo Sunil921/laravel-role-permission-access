@@ -22,4 +22,22 @@ class UserActivity extends Model
     {
         return $this->belongsTo(Module::class);
     }
+
+    /**
+     * Get the extended operation name.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    protected function getOperationAttribute($value)
+    {
+        switch ($value) {
+            case 'c': return 'Create';
+            case 'r': return 'Read';
+            case 'u': return 'Update';
+            case 'd': return 'Delete';
+            case 'x': return 'Export';
+            default: return '';
+        }
+    }
 }
