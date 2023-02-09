@@ -59,17 +59,6 @@ class ModuleController extends Controller
             return redirect()->route('module.index')->with('success','Module store successfully');
         }
         return back();
-
-        /* $link = 'module?table_id=' . $module->id;
-        if ($module_response && isset($request->module_id)) {
-            storeApprovalTable(Module::class, $module->id, $link, '1');
-            return redirect()->route('module.index')->with('success', 'Module updated successfully.');
-        }
-        else if ($module_response) {
-            storeApprovalTable(Module::class, $module->id, $link, '0');
-            return redirect()->route('module.index')->with('success', 'Module Added Successfully!');
-        }
-        return redirect()->route('module.index')->with('error', 'Module Not Added!'); */
     }
 
     /**

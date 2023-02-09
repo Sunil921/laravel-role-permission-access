@@ -91,13 +91,10 @@ class RolePermissionController extends Controller
                 RoleChecker::firstOrCreate(['role_checker_id' => $role_checker, 'role_checking_id' => $role->id]);
         }
 
-        $link = 'role?table_id=' . $role->id;
         if ($role_save_response && isset($request->role_id)) {
-            storeApprovalTable(Role::class, $role->id, $link, '1');
             return redirect()->route('role.index')->with('success', 'Role updated successfully.')   ;
         }
         else if ($role_save_response) {
-            storeApprovalTable(Role::class, $role->id, $link, '0');
             return redirect()->route('role.index')->with('success', 'Role Added Successfully!');
         }
 

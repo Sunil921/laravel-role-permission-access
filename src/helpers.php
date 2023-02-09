@@ -3,7 +3,6 @@
 use Sunil\LaravelRolePermissionAccess\Models\RoleModuleOperation;
 use Sunil\LaravelRolePermissionAccess\Models\RoleModule;
 use Sunil\LaravelRolePermissionAccess\Models\Module;
-use Sunil\LaravelRolePermissionAccess\Models\Approval;
 
 if (! function_exists('getModuleFromRoute')) {
     function getModuleFromRoute($module_link = null)
@@ -59,40 +58,6 @@ if (! function_exists('getCurrentRoleOperation')) {
                                         ->where('role_modules.module_id', getModuleFromRoute($module_link)->id)
                                         ->first();
         return $operation;
-    }
-}
-
-if (! function_exists('storeApprovalTable')) {
-    function storeApprovalTable($table, $id, $link, $operation)
-    {
-        $table_name = app($table)->getTable();
-        $module = getModuleFromRoute();
-        $approval_table = ['row_id' => $id, 'table_name' => $table_name, 'module_name' => $module->name, 'link' => url($link), 'added_by' => request()->user()->id, 'operation' => $operation];
-        Approval::create($approval_table);
-    }
-}
-
-if (! function_exists('getTableDataWithApproval')) {
-    function getTableDataWithApproval($table)
-    {
-        $table_name = app($table)->getTable();
-        $operation = getCurrentRoleOperation();
-        if (!request()->user()->isSuperAdmin() && str_contains($operation->operation, 'h') && !isset(request()->table_id)) {
-            $table_records = $table::select($table_name . '.*')
-                                    ->join('approvals', 'approvals.row_id', $table_name . '.id')
-                                    ->where('approvals.approve', '!=', '1')->orderBy('id','desc')
-                                    ->get();
-        }
-        else if (!request()->user()->isSuperAdmin() && str_contains($operation->operation, 'h') && isset(request()->table_id)) {
-            $table_records = $table::select($table_name . '.*')
-                                    ->join('approvals', 'approvals.row_id', $table_name . '.id')
-                                    ->where('approvals.approve', '!=', '1')
-                                    ->where($table_name . '.id', request()->table_id)->orderBy('id','desc')
-                                    ->get();
-        }
-        else
-            $table_records = $table::orderBy('id','desc')->get();
-        return $table_records;
     }
 }
 
