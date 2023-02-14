@@ -86,6 +86,18 @@ if (! function_exists('showMenu')) {
     }
 }
 
+if (! function_exists('checkMonthLocked')) {
+    /**
+     * Check if month is locked.
+     *
+     * @return boolean
+     */
+    function checkMonthLocked()
+    {
+        return false;
+    }
+}
+
 if (! function_exists('rback')) {
     /**
      * Create a new redirect response to the previous location.
@@ -130,10 +142,10 @@ if (! function_exists('getRouteOperation')) {
                 $route_operation = 'r';
             else if ($route_name == 'show')
                 $route_operation = 'r';
-            else if ($route_name == 'create' && (isset($request->update) && $request->update == 'true'))
-                $route_operation = 'u';
             else if ($route_name == 'create')
                 $route_operation = 'c';
+            else if ($route_name == 'store' && (isset($request->update) && $request->update == 'true'))
+                $route_operation = 'u';
             else if ($route_name == 'store')
                 $route_operation = 'c';
             else if ($route_name == 'edit')
