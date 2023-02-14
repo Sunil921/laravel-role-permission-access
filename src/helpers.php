@@ -108,3 +108,43 @@ if (! function_exists('rback')) {
         return back($status, $headers, $fallback)->withErrors($withErrors);
     }
 }
+
+if (! function_exists('getRouteOperation')) {
+    /**
+     * Returns route's operation
+     *
+     * @return operation (c / r / u / d / h / x) or boolean false if not found
+     */
+    function getRouteOperation()
+    {
+        $request = request();
+        $route_operation = $request->route()->getAction();
+        if (isset($route_operation['otype'])) {
+            $route_operation = $route_operation['otype'];
+            if ($route_operation == 'c' && (isset($request->update) && $request->update == 'true'))
+                $route_operation = 'u';
+        }
+        else {
+            $route_name = $request->route()->getActionMethod();
+            if ($route_name == 'index')
+                $route_operation = 'r';
+            else if ($route_name == 'show')
+                $route_operation = 'r';
+            else if ($route_name == 'create' && (isset($request->update) && $request->update == 'true'))
+                $route_operation = 'u';
+            else if ($route_name == 'create')
+                $route_operation = 'c';
+            else if ($route_name == 'store')
+                $route_operation = 'c';
+            else if ($route_name == 'edit')
+                $route_operation = 'u';
+            else if ($route_name == 'update')
+                $route_operation = 'u';
+            else if ($route_name == 'destroy')
+                $route_operation = 'd';
+            else
+                return false;
+        }
+        return $route_operation;
+    }
+}
