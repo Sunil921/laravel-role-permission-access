@@ -16,7 +16,8 @@ if (! function_exists('getModuleFromRoute')) {
 if (! function_exists('authorizeRoleModule')) {
     function authorizeRoleModule($p_operation, $module_name = null)
     {
-        $role_id = request()->user()->role_id;
+        $request = request();
+        $role_id = $request->user()->role_id;
         if ($role_id == 1)                                                      // role_id 1 means superadmin
             return 0;                                                           // approved
         $module = getModuleFromRoute($module_name);
@@ -27,7 +28,7 @@ if (! function_exists('authorizeRoleModule')) {
             $role_module_operation = RoleModuleOperation::where('role_module_id', $use_role_module->id)->first();
             if (isset($role_module_operation)) {
                 $operation = $role_module_operation->operation;
-                if (str_contains($operation, 'h') && ($p_operation == 'r' || ($p_operation == 'u' && in_array("GET", request()->route()->methods()))))
+                if (str_contains($operation, 'h') && ($p_operation == 'r' || ($p_operation == 'u' && $request->isMethod('GET'))))
                     return 1;                                                           // approve response
                 else if (str_contains($operation, $p_operation))
                     return 1;                                                           // approve response
@@ -83,41 +84,6 @@ if (! function_exists('showMenu')) {
             }
         } catch(Exception $e) {}
         return '';
-    }
-}
-
-if (! function_exists('checkMonthLocked')) {
-    /**
-     * Check if month is locked.
-     *
-     * @return boolean
-     */
-    function checkMonthLocked()
-    {
-        return false;
-    }
-}
-
-if (! function_exists('rback')) {
-    /**
-     * Create a new redirect response to the previous location.
-     *
-     * @param  mixed    $withErrors
-     * @param  int      $status
-     * @param  array    $headers
-     * @param  mixed    $fallback
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    function rback($withErrors = [], $status = 302, $headers = [], $fallback = false)
-    {
-        if (!is_array($withErrors)) {
-            $withErrors = [ $withErrors ];
-        }
-        $locked = false;
-        if ($locked) {
-            $withErrors['model'] ='Database is locked';
-        }
-        return back($status, $headers, $fallback)->withErrors($withErrors);
     }
 }
 

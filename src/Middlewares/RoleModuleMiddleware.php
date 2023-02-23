@@ -21,7 +21,7 @@ class RoleModuleMiddleware
         if ($route_operation === false) abort(500);
 
         $user = $request->user();
-        $this->setUserActivity($request, $route_operation, $user);
+        $this->storeUserActivity($request, $route_operation, $user);
 
         if ($user->isSuperAdmin()) return $next($request);
 
@@ -31,7 +31,7 @@ class RoleModuleMiddleware
         return $next($request);
     }
 
-    public function setUserActivity($request, $route_operation, $user) {
+    public function storeUserActivity($request, $route_operation, $user) {
         $user_activity = new UserActivity();
         $user_activity->added_by = $user->id;
         $user_activity->body = json_encode($request->except('_token', '_method'));

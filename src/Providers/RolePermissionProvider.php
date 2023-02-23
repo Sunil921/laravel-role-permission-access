@@ -87,14 +87,6 @@ class RolePermissionProvider extends ServiceProvider
         });
     }
 
-    public function registerLockModelEvents()
-    {
-        $events = ['eloquent.saving: *', 'eloquent.creating: *', 'eloquent.updating: *', 'eloquent.deleting: *', 'eloquent.restoring: *'];
-        Event::listen($events, function ($model) {
-            return false;
-        });
-    }
-
     /**
      * Bootstrap services.
      *
@@ -106,6 +98,5 @@ class RolePermissionProvider extends ServiceProvider
         // $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
         $this->offerPublishing();
         $this->bladeDirectives();
-        // $this->registerLockModelEvents();
     }
 }
